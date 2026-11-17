@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive e-commerce customer behavior data dashboard for an academic data dissemination project.">
+  <title>ShopPulse | E-Commerce Customer Behavior Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root{--navy:#142b3b;--teal:#0e8990;--teal2:#dff3f1;--ink:#233746;--muted:#71818c;--bg:#f3f7f8;--line:#e8eef0}
+    *{box-sizing:border-box} body{background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif}
+    .sidebar{background:var(--navy);min-height:100vh;color:#fff;padding:28px 19px;position:sticky;top:0}
+    .brand{font:800 22px Manrope,sans-serif;letter-spacing:-.7px}.brand-mark{display:inline-grid;place-items:center;width:34px;height:34px;background:#12a0a1;border-radius:11px;margin-right:9px}
+    .side-label{font-size:10px;color:#8fa6b3;letter-spacing:1.5px;font-weight:800;margin:34px 0 12px}
+    .side-link{display:flex;align-items:center;gap:11px;color:#c7d4da;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:13px;margin:4px 0}
+    .side-link.active,.side-link:hover{background:#244354;color:#fff}
+    .side-note{background:#1d3b4d;border:1px solid #315164;border-radius:13px;padding:14px;font-size:11px;color:#c2d3da;line-height:1.6}
+    .main{padding:30px 34px 24px;max-width:1600px;margin:auto}
+    .topline{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1.3px}
+    h1{font:800 clamp(24px,3vw,31px) Manrope,sans-serif;color:var(--navy);letter-spacing:-1px}
+    .subtitle{color:var(--muted);font-size:13px}
+    .panel,.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(23,52,68,.035)}
+    .kpi{padding:19px 20px;height:100%;position:relative;overflow:hidden}
+    .kpi-label{font-size:12px;color:var(--muted);font-weight:600}.kpi-value{font:800 27px Manrope,sans-serif;color:var(--navy);margin:9px 0 4px}
+    .kpi-foot{font-size:11px;color:#82919a}.kpi-icon{position:absolute;right:17px;top:17px;background:var(--teal2);color:var(--teal);width:35px;height:35px;border-radius:11px;display:grid;place-items:center;font-size:16px}
+    .panel{padding:20px;height:100%}.panel-title{font:700 15px Manrope,sans-serif;color:var(--navy)}.panel-sub{font-size:11px;color:var(--muted);margin-top:4px}
+    .chart-wrap{height:245px;position:relative;margin-top:15px}
+    .filter-label{font-size:11px;color:var(--muted);font-weight:700;margin-bottom:6px}
+    .form-select{border-color:#dce6e9;border-radius:10px;font-size:12px;padding:10px 34px 10px 12px;min-width:190px}
+    .btn-teal{background:var(--teal);color:#fff;border:0;border-radius:9px;font-size:12px;font-weight:700;padding:10px 14px}
+    .btn-teal:hover{background:#08777d;color:#fff}.btn-lightline{background:#fff;border:1px solid #dce6e9;color:var(--ink);border-radius:9px;font-size:12px;font-weight:700;padding:9px 13px}
+    .table{font-size:12px;vertical-align:middle}.table thead th{font-size:10px;color:#7c8b94;text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--line);white-space:nowrap}
+    .table tbody td{padding-top:12px;padding-bottom:12px}.status-pill{background:#e4f5ef;color:#16805d;border-radius:20px;padding:4px 9px;font-size:10px;font-weight:700}
+    .finding{background:#f0f8f8;border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:10px 12px;font-size:11px;color:#47616c;line-height:1.55;margin-top:13px}
+    footer{font-size:10px;color:#87959d;border-top:1px solid var(--line);padding-top:17px;margin-top:25px}
+    @media(max-width:767px){.sidebar{min-height:auto;position:relative;padding:15px 18px}.side-label,.side-note,.side-link span{display:none}.side-nav{display:flex;gap:5px;overflow:auto}.side-link{white-space:nowrap;padding:8px 10px}.main{padding:23px 15px}.chart-wrap{height:220px}}
+  </style>
+</head>
+<body>
+<div class="container-fluid">
+ <div class="row g-0">
+  <aside class="col-md-2 sidebar">
+   <div class="brand"><span class="brand-mark">S</span>ShopPulse</div>
+   <div class="side-label">WORKSPACE</div>
+   <nav class="side-nav" aria-label="Main navigation">
+    <a class="side-link active" href="#overview">▦ <span>Overview</span></a>
+    <a class="side-link" href="#analytics">◷ <span>Analytics</span></a>
+    <a class="side-link" href="#records">▤ <span>Customer data</span></a>
+   </nav>
+   <div class="side-label">ABOUT THIS PROJECT</div>
+   <div class="side-note">E-Commerce Customer Behavior<br><br>Project 9 · Data Visualization<br><br>Interactive academic dashboard using a simulated customer dataset.</div>
+  </aside>
+  <main class="col-md-10">
+   <div class="main">
+    <header id="overview" class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+     <div><div class="topline mb-2">DATA DISSEMINATION / PROJECT 09</div><h1>E-Commerce Customer Behavior</h1><p class="subtitle mb-0">Explore customer demographics, purchasing patterns and payment preferences.</p></div>
+     <div class="d-flex align-items-end flex-wrap gap-2">
+      <div><div class="filter-label">FILTER BY PRODUCT CATEGORY</div><select id="categoryFilter" class="form-select" aria-label="Filter by product category"><option value="All">All categories</option></select></div>
+      <button id="resetBtn" class="btn-lightline" type="button">↺ Reset</button>
+      <button id="downloadBtn" class="btn-teal" type="button">↓ Export data</button>
+     </div>
+    </header>
+
+    <section class="row g-3 mb-4" id="kpis" aria-label="Key performance indicators">
+     <div class="col-6 col-xl-4"><div class="kpi"><div class="kpi-label">Total orders</div><div class="kpi-value" id="totalOrders">—</div><div class="kpi-foot">Number of recorded purchases</div><div class="kpi-icon">▤</div></div></div>
+     <div class="col-6 col-xl-4"><div class="kpi"><div class="kpi-label">Average order value</div><div class="kpi-value" id="avgOrder">—</div><div class="kpi-foot">Average value per purchase (EGP)</div><div class="kpi-icon">₤</div></div></div>
+     <div class="col-12 col-xl-4"><div class="kpi"><div class="kpi-label">Average customer rating</div><div class="kpi-value" id="avgRating">—</div><div class="kpi-foot">Customer rating out of 5</div><div class="kpi-icon">★</div></div></div>
+    </section>
+
+    <section id="analytics" class="row g-3 mb-3" aria-label="Customer analytics charts">
+     <div class="col-12 col-xl-6"><article class="panel"><div class="panel-title">Customer demographics</div><div class="panel-sub">Orders by age group and gender</div><div class="chart-wrap"><canvas id="demographicsChart" role="img" aria-label="Stacked bar chart showing customer orders by age group and gender"></canvas></div><div class="finding" id="demoFinding">Finding: demographic insights will appear here.</div></article></div>
+     <div class="col-12 col-xl-6"><article class="panel"><div class="panel-title">Purchases over time</div><div class="panel-sub">Monthly number of customer orders</div><div class="chart-wrap"><canvas id="trendChart" role="img" aria-label="Line chart showing monthly purchases over time"></canvas></div><div class="finding" id="trendFinding">Finding: monthly purchasing trend will appear here.</div></article></div>
+     <div class="col-12 col-xl-7"><article class="panel"><div class="panel-title">Popular product categories</div><div class="panel-sub">Number of orders by product category</div><div class="chart-wrap"><canvas id="productsChart" role="img" aria-label="Bar chart showing popular product categories"></canvas></div><div class="finding" id="productFinding">Finding: popular category will appear here.</div></article></div>
+     <div class="col-12 col-xl-5"><article class="panel"><div class="panel-title">Payment method distribution</div><div class="panel-sub">Share of orders by payment method</div><div class="chart-wrap"><canvas id="paymentChart" role="img" aria-label="Doughnut chart showing payment method distribution"></canvas></div><div class="finding" id="paymentFinding">Finding: preferred payment method will appear here.</div></article></div>
+    </section>
+
+    <section id="records" class="panel mt-3" aria-label="Customer purchase data table">
+     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3"><div><div class="panel-title">Customer purchase records</div><div class="panel-sub">Filtered dataset · anonymized customer IDs</div></div><span class="status-pill" id="recordCount">0 records</span></div>
+     <div class="table-responsive"><table class="table table-hover mb-0">
+      <thead><tr><th>Customer ID</th><th>Age group</th><th>Gender</th><th>Category</th><th>Purchase date</th><th>Order value</th><th>Payment</th><th>Rating</th></tr></thead>
+      <tbody id="tableBody"><tr><td colspan="8">Loading dataset…</td></tr></tbody>
+     </table></div>
+    </section>
+
+    <section class="panel mt-3" aria-label="Dataset information">
+     <div class="panel-title mb-2">Dataset notes & methodology</div>
+     <div class="row g-3">
+      <div class="col-md-4"><div class="panel-sub">DATA SOURCE</div><div class="small fw-semibold mt-1">Simulated educational dataset</div></div>
+      <div class="col-md-4"><div class="panel-sub">RECORDS</div><div class="small fw-semibold mt-1" id="sourceCount">60 sample purchase records</div></div>
+      <div class="col-md-4"><div class="panel-sub">CALCULATION METHODS</div><div class="small fw-semibold mt-1">Average = total ÷ number of records</div></div>
+     </div>
+     <p class="panel-sub mt-3 mb-0">This dataset is created for demonstration and learning. It does not represent real customers or actual business performance. Average order value and average rating are recalculated after applying the category filter.</p>
+    </section>
+    <footer class="d-flex justify-content-between flex-wrap gap-2"><span>ShopPulse Analytics · E-Commerce Customer Behavior</span><span>Responsive dashboard · Bootstrap 5 · Chart.js</span></footer>
+   </div>
+  </main>
+ </div>
+</div>
+<script>
+const DATA = [{"customer_id":"C001","age_group":"18–24","gender":"Female","product_category":"Sports","purchase_date":"2026-01-27","order_value":828.56,"payment_method":"Digital Wallet","customer_rating":5},{"customer_id":"C002","age_group":"18–24","gender":"Male","product_category":"Electronics","purchase_date":"2026-05-18","order_value":3682.58,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C003","age_group":"25–34","gender":"Female","product_category":"Electronics","purchase_date":"2026-06-13","order_value":3412.0,"payment_method":"Cash on Delivery","customer_rating":3},{"customer_id":"C004","age_group":"45–54","gender":"Female","product_category":"Home & Kitchen","purchase_date":"2026-08-26","order_value":1893.05,"payment_method":"Bank Transfer","customer_rating":1},{"customer_id":"C005","age_group":"35–44","gender":"Male","product_category":"Home & Kitchen","purchase_date":"2026-10-28","order_value":1235.55,"payment_method":"Digital Wallet","customer_rating":5},{"customer_id":"C006","age_group":"35–44","gender":"Male","product_category":"Fashion","purchase_date":"2026-09-19","order_value":446.95,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C007","age_group":"18–24","gender":"Male","product_category":"Fashion","purchase_date":"2026-07-23","order_value":326.12,"payment_method":"Bank Transfer","customer_rating":1},{"customer_id":"C008","age_group":"25–34","gender":"Male","product_category":"Home & Kitchen","purchase_date":"2026-08-25","order_value":1932.07,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C009","age_group":"45–54","gender":"Female","product_category":"Fashion","purchase_date":"2026-10-09","order_value":313.77,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C010","age_group":"45–54","gender":"Male","product_category":"Beauty","purchase_date":"2026-03-04","order_value":365.46,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C011","age_group":"25–34","gender":"Male","product_category":"Home & Kitchen","purchase_date":"2026-04-02","order_value":1665.23,"payment_method":"Credit Card","customer_rating":3},{"customer_id":"C012","age_group":"18–24","gender":"Female","product_category":"Home & Kitchen","purchase_date":"2026-06-13","order_value":1287.05,"payment_method":"Bank Transfer","customer_rating":5},{"customer_id":"C013","age_group":"25–34","gender":"Male","product_category":"Fashion","purchase_date":"2026-01-13","order_value":298.54,"payment_method":"Cash on Delivery","customer_rating":3},{"customer_id":"C014","age_group":"45–54","gender":"Female","product_category":"Home & Kitchen","purchase_date":"2026-05-31","order_value":1561.87,"payment_method":"Credit Card","customer_rating":4},{"customer_id":"C015","age_group":"45–54","gender":"Male","product_category":"Electronics","purchase_date":"2026-03-24","order_value":3628.18,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C016","age_group":"18–24","gender":"Male","product_category":"Beauty","purchase_date":"2026-07-06","order_value":210.83,"payment_method":"Digital Wallet","customer_rating":5},{"customer_id":"C017","age_group":"18–24","gender":"Male","product_category":"Electronics","purchase_date":"2026-04-22","order_value":3023.93,"payment_method":"Cash on Delivery","customer_rating":5},{"customer_id":"C018","age_group":"25–34","gender":"Male","product_category":"Beauty","purchase_date":"2026-09-24","order_value":614.12,"payment_method":"Digital Wallet","customer_rating":5},{"customer_id":"C019","age_group":"45–54","gender":"Female","product_category":"Home & Kitchen","purchase_date":"2026-10-23","order_value":2017.45,"payment_method":"Cash on Delivery","customer_rating":3},{"customer_id":"C020","age_group":"25–34","gender":"Female","product_category":"Electronics","purchase_date":"2026-08-27","order_value":1528.25,"payment_method":"Bank Transfer","customer_rating":5},{"customer_id":"C021","age_group":"25–34","gender":"Male","product_category":"Beauty","purchase_date":"2026-06-20","order_value":766.56,"payment_method":"Digital Wallet","customer_rating":5},{"customer_id":"C022","age_group":"25–34","gender":"Female","product_category":"Sports","purchase_date":"2026-02-22","order_value":1452.63,"payment_method":"Credit Card","customer_rating":4},{"customer_id":"C023","age_group":"25–34","gender":"Male","product_category":"Home & Kitchen","purchase_date":"2026-07-11","order_value":518.97,"payment_method":"Digital Wallet","customer_rating":4},{"customer_id":"C024","age_group":"18–24","gender":"Female","product_category":"Home & Kitchen","purchase_date":"2026-04-30","order_value":737.68,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C025","age_group":"45–54","gender":"Male","product_category":"Electronics","purchase_date":"2026-09-25","order_value":877.03,"payment_method":"Cash on Delivery","customer_rating":5},{"customer_id":"C026","age_group":"35–44","gender":"Female","product_category":"Sports","purchase_date":"2026-05-10","order_value":676.68,"payment_method":"Cash on Delivery","customer_rating":4},{"customer_id":"C027","age_group":"45–54","gender":"Female","product_category":"Sports","purchase_date":"2026-03-08","order_value":409.21,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C028","age_group":"18–24","gender":"Female","product_category":"Sports","purchase_date":"2026-07-31","order_value":1198.26,"payment_method":"Digital Wallet","customer_rating":3},{"customer_id":"C029","age_group":"18–24","gender":"Male","product_category":"Sports","purchase_date":"2026-08-28","order_value":1477.0,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C030","age_group":"55+","gender":"Female","product_category":"Electronics","purchase_date":"2026-08-17","order_value":2237.01,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C031","age_group":"55+","gender":"Male","product_category":"Beauty","purchase_date":"2026-09-12","order_value":202.59,"payment_method":"Bank Transfer","customer_rating":2},{"customer_id":"C032","age_group":"25–34","gender":"Female","product_category":"Beauty","purchase_date":"2026-04-30","order_value":716.49,"payment_method":"Bank Transfer","customer_rating":5},{"customer_id":"C033","age_group":"18–24","gender":"Female","product_category":"Fashion","purchase_date":"2026-10-05","order_value":901.66,"payment_method":"Bank Transfer","customer_rating":3},{"customer_id":"C034","age_group":"25–34","gender":"Female","product_category":"Home & Kitchen","purchase_date":"2026-07-29","order_value":1776.07,"payment_method":"Credit Card","customer_rating":4},{"customer_id":"C035","age_group":"35–44","gender":"Male","product_category":"Fashion","purchase_date":"2026-09-10","order_value":475.2,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C036","age_group":"18–24","gender":"Male","product_category":"Fashion","purchase_date":"2026-01-16","order_value":989.12,"payment_method":"Digital Wallet","customer_rating":5},{"customer_id":"C037","age_group":"55+","gender":"Female","product_category":"Sports","purchase_date":"2026-09-12","order_value":717.78,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C038","age_group":"18–24","gender":"Female","product_category":"Electronics","purchase_date":"2026-06-09","order_value":2766.77,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C039","age_group":"18–24","gender":"Male","product_category":"Electronics","purchase_date":"2026-02-06","order_value":2831.1,"payment_method":"Digital Wallet","customer_rating":4},{"customer_id":"C040","age_group":"55+","gender":"Female","product_category":"Beauty","purchase_date":"2026-06-26","order_value":840.52,"payment_method":"Credit Card","customer_rating":2},{"customer_id":"C041","age_group":"35–44","gender":"Male","product_category":"Electronics","purchase_date":"2026-04-07","order_value":1806.89,"payment_method":"Bank Transfer","customer_rating":3},{"customer_id":"C042","age_group":"18–24","gender":"Female","product_category":"Fashion","purchase_date":"2026-10-26","order_value":483.41,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C043","age_group":"25–34","gender":"Female","product_category":"Sports","purchase_date":"2026-04-22","order_value":347.77,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C044","age_group":"18–24","gender":"Male","product_category":"Fashion","purchase_date":"2026-04-05","order_value":387.76,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C045","age_group":"18–24","gender":"Male","product_category":"Beauty","purchase_date":"2026-04-11","order_value":536.73,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C046","age_group":"25–34","gender":"Male","product_category":"Sports","purchase_date":"2026-02-11","order_value":1109.95,"payment_method":"Digital Wallet","customer_rating":4},{"customer_id":"C047","age_group":"45–54","gender":"Female","product_category":"Electronics","purchase_date":"2026-04-14","order_value":2832.79,"payment_method":"Digital Wallet","customer_rating":5},{"customer_id":"C048","age_group":"18–24","gender":"Female","product_category":"Home & Kitchen","purchase_date":"2026-08-10","order_value":1694.17,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C049","age_group":"35–44","gender":"Male","product_category":"Sports","purchase_date":"2026-01-17","order_value":1072.96,"payment_method":"Digital Wallet","customer_rating":5},{"customer_id":"C050","age_group":"35–44","gender":"Male","product_category":"Home & Kitchen","purchase_date":"2026-08-23","order_value":608.08,"payment_method":"Cash on Delivery","customer_rating":5},{"customer_id":"C051","age_group":"45–54","gender":"Female","product_category":"Sports","purchase_date":"2026-10-11","order_value":377.12,"payment_method":"Bank Transfer","customer_rating":5},{"customer_id":"C052","age_group":"35–44","gender":"Male","product_category":"Electronics","purchase_date":"2026-05-06","order_value":2771.61,"payment_method":"Bank Transfer","customer_rating":4},{"customer_id":"C053","age_group":"25–34","gender":"Male","product_category":"Sports","purchase_date":"2026-03-01","order_value":369.82,"payment_method":"Credit Card","customer_rating":5},{"customer_id":"C054","age_group":"25–34","gender":"Male","product_category":"Fashion","purchase_date":"2026-09-09","order_value":369.69,"payment_method":"Digital Wallet","customer_rating":3},{"customer_id":"C055","age_group":"25–34","gender":"Male","product_category":"Beauty","purchase_date":"2026-05-29","order_value":436.93,"payment_method":"Bank Transfer","customer_rating":5},{"customer_id":"C056","age_group":"25–34","gender":"Female","product_category":"Fashion","purchase_date":"2026-01-15","order_value":570.43,"payment_method":"Cash on Delivery","customer_rating":1},{"customer_id":"C057","age_group":"18–24","gender":"Male","product_category":"Sports","purchase_date":"2026-03-13","order_value":1612.52,"payment_method":"Digital Wallet","customer_rating":4},{"customer_id":"C058","age_group":"35–44","gender":"Male","product_category":"Home & Kitchen","purchase_date":"2026-06-28","order_value":1174.01,"payment_method":"Bank Transfer","customer_rating":5},{"customer_id":"C059","age_group":"35–44","gender":"Male","product_category":"Electronics","purchase_date":"2026-02-09","order_value":3145.58,"payment_method":"Cash on Delivery","customer_rating":4},{"customer_id":"C060","age_group":"55+","gender":"Male","product_category":"Beauty","purchase_date":"2026-03-23","order_value":527.41,"payment_method":"Bank Transfer","customer_rating":4}];
+let charts = {};
+const palette = ['#0e8990','#4e78a0','#e3a64c','#9a82c5','#d77979'];
+const money = n => 'EGP ' + Number(n).toLocaleString('en-EG',{maximumFractionDigits:2});
+const average = arr => arr.length ? arr.reduce((s,x)=>s+x,0)/arr.length : 0;
+const groupCount = (rows,key) => rows.reduce((a,r)=>{a[r[key]]=(a[r[key]]||0)+1;return a;},{})
+const monthName = key => new Date(key+'-01T00:00:00').toLocaleDateString('en',{month:'short',year:'2-digit'});
+function selectedRows(){
+ const category=document.getElementById('categoryFilter').value;
+ return category==='All' ? DATA : DATA.filter(r=>r.product_category===category);
+}
+function makeChart(id,type,data,options={}){
+ return new Chart(document.getElementById(id),{type,data,options:{responsive:true,maintainAspectRatio:false,...options}});
+}
+function initCharts(){
+ charts.demographics=makeChart('demographicsChart','bar',{labels:agesList(),datasets:[]},{scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{position:'bottom'}}});
+ charts.trend=makeChart('trendChart','line',{labels:[],datasets:[{label:'Orders',data:[],borderColor:palette[0],backgroundColor:'rgba(14,137,144,.12)',fill:true,tension:.35,pointRadius:3}]},{scales:{y:{beginAtZero:true,ticks:{precision:0}},x:{grid:{display:false}}},plugins:{legend:{display:false}}});
+ charts.products=makeChart('productsChart','bar',{labels:[],datasets:[{label:'Orders',data:[],backgroundColor:palette,borderRadius:6}]},{indexAxis:'y',scales:{x:{beginAtZero:true,ticks:{precision:0}},y:{grid:{display:false}}},plugins:{legend:{display:false}}});
+ charts.payment=makeChart('paymentChart','doughnut',{labels:[],datasets:[{data:[],backgroundColor:palette,borderWidth:0,hoverOffset:5}]},{cutout:'63%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:14}}}});
+}
+function agesList(){return ['18–24','25–34','35–44','45–54','55+'];}
+function update(){
+ const rows=selectedRows(), n=rows.length;
+ const avgValue=average(rows.map(r=>r.order_value));
+ const avgRate=average(rows.map(r=>r.customer_rating));
+ document.getElementById('totalOrders').textContent=n.toLocaleString();
+ document.getElementById('avgOrder').textContent=n?money(avgValue):'—';
+ document.getElementById('avgRating').textContent=n?avgRate.toFixed(1)+' / 5':'—';
+ document.getElementById('recordCount').textContent=n+' records';
+
+ const genders=['Female','Male'];
+ const demoSets=genders.map((g,i)=>({label:g,data:agesList().map(a=>rows.filter(r=>r.gender===g&&r.age_group===a).length),backgroundColor:palette[i],borderRadius:4}));
+ charts.demographics.data.datasets=demoSets; charts.demographics.update();
+ const demoCounts=groupCount(rows,'age_group');
+ const topAge=Object.entries(demoCounts).sort((a,b)=>b[1]-a[1])[0];
+ document.getElementById('demoFinding').textContent=topAge?`Finding: the ${topAge[0]} age group has the highest number of orders (${topAge[1]}).`:'Finding: no records match this filter.';
+
+ const months=[...new Set(rows.map(r=>r.purchase_date.slice(0,7)))].sort();
+ const monthCounts=months.map(m=>rows.filter(r=>r.purchase_date.startsWith(m)).length);
+ charts.trend.data.labels=months.map(monthName); charts.trend.data.datasets[0].data=monthCounts; charts.trend.update();
+ const peak=months.length?months[monthCounts.indexOf(Math.max(...monthCounts))]:null;
+ document.getElementById('trendFinding').textContent=peak?`Finding: the highest purchase activity occurred in ${monthName(peak)} (${Math.max(...monthCounts)} orders).`:'Finding: no records match this filter.';
+
+ const cats=[...new Set(DATA.map(r=>r.product_category))];
+ const catCounts=cats.map(c=>rows.filter(r=>r.product_category===c).length);
+ charts.products.data.labels=cats; charts.products.data.datasets[0].data=catCounts; charts.products.update();
+ const best=cats.length?cats[catCounts.indexOf(Math.max(...catCounts))]:null;
+ document.getElementById('productFinding').textContent=best?`Finding: ${best} is the leading category in the current view with ${Math.max(...catCounts)} orders.`:'Finding: no records match this filter.';
+
+ const pay=groupCount(rows,'payment_method'), payLabels=Object.keys(pay);
+ charts.payment.data.labels=payLabels; charts.payment.data.datasets[0].data=payLabels.map(k=>pay[k]); charts.payment.update();
+ const bestPay=payLabels.sort((a,b)=>pay[b]-pay[a])[0];
+ document.getElementById('paymentFinding').textContent=bestPay?`Finding: ${bestPay} is the most frequently used payment method (${pay[bestPay]} orders).`:'Finding: no records match this filter.';
+
+ document.getElementById('tableBody').innerHTML=rows.map(r=>`<tr><td class="fw-bold">${r.customer_id}</td><td>${r.age_group}</td><td>${r.gender}</td><td>${r.product_category}</td><td>${r.purchase_date}</td><td>${money(r.order_value)}</td><td>${r.payment_method}</td><td>★ ${r.customer_rating}/5</td></tr>`).join('') || '<tr><td colspan="8" class="text-center text-muted py-4">No records found.</td></tr>';
+}
+function downloadCSV(){
+ const rows=selectedRows(), keys=['customer_id','age_group','gender','product_category','purchase_date','order_value','payment_method','customer_rating'];
+ const csv=[keys.join(','),...rows.map(r=>keys.map(k=>`"${String(r[k]).replaceAll('"','""')}"`).join(','))].join('\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='ecommerce-customer-data.csv';a.click();URL.revokeObjectURL(a.href);
+}
+function start(){
+  const categories=[...new Set(DATA.map(r=>r.product_category))].sort();
+  categories.forEach(c=>document.getElementById('categoryFilter').add(new Option(c,c)));
+  document.getElementById('sourceCount').textContent=DATA.length+' simulated purchase records';
+  initCharts();
+  update();
+  document.getElementById('categoryFilter').addEventListener('change',update);
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    document.getElementById('categoryFilter').value='All';
+    update();
+  });
+  document.getElementById('downloadBtn').addEventListener('click',downloadCSV);
+}
+start();
+</script>
+</body>
+</html>
