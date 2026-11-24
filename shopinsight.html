@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)file:///C:/Users/hp/Downloads/ShopInsight_Website.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShopInsight Analytics | E-Commerce Customer Behavior</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root { --navy:#17324d; --teal:#0e8587; --pale:#eef5f6; --muted:#718096; }
+    body { background:#f4f7fa; color:#243447; font-family:Arial, sans-serif; }
+    .topbar { background:var(--navy); color:white; }
+    .brand-mark { width:38px;height:38px;border-radius:12px;background:var(--teal);display:grid;place-items:center;font-weight:800; }
+    .hero { background:linear-gradient(120deg,#17324d,#176b70);color:white;border-radius:18px; }
+    .eyebrow { color:#b8e5e3;letter-spacing:.12em;text-transform:uppercase;font-size:.72rem;font-weight:700; }
+    .panel,.kpi { border:0;border-radius:16px;box-shadow:0 5px 22px rgba(27,50,77,.06); }
+    .kpi-label { color:var(--muted);font-size:.84rem; }
+    .kpi-value { color:var(--navy);font-size:1.75rem;font-weight:800; }
+    .kpi-icon { width:38px;height:38px;border-radius:12px;background:#e4f3f2;color:var(--teal);display:grid;place-items:center;font-weight:800; }
+    .section-title { color:var(--navy);font-weight:750; }
+    .chart-wrap { position:relative;height:275px; }
+    .form-select { border-radius:10px;max-width:260px; }
+    .table thead th { color:#64748b;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap; }
+    .badge-soft { background:#e5f4f2;color:#087779; }
+    footer { color:#8290a0; }
+    @media(max-width:576px){ .hero{padding:1.4rem!important}.kpi-value{font-size:1.35rem}.chart-wrap{height:240px} }
+  </style>
+</head>
+<body><nav style="position:sticky;top:0;z-index:9999;background:#102f42;padding:10px 18px;display:flex;gap:12px;align-items:center;font:600 13px Arial,sans-serif;box-shadow:0 2px 10px #0002"><a href="index.html" style="color:#dce9ee;text-decoration:none;margin-right:auto">Shop Analytics · Home</a><a href="shopinsight.html" style="color:#fff;text-decoration:none">ShopInsight</a><a href="shoppulse.html" style="color:#fff;text-decoration:none">ShopPulse</a></nav>
+<header class="topbar py-3">
+  <div class="container d-flex align-items-center gap-3">
+    <div class="brand-mark">S</div>
+    <div><div class="fw-bold">ShopInsight Analytics</div><small class="text-white-50">Customer intelligence dashboard</small></div>
+    <span class="ms-auto badge rounded-pill text-bg-light">PROJECT 09</span>
+  </div>
+</header>
+
+<main class="container py-4">
+  <section class="hero p-4 p-md-5 mb-4">
+    <div class="eyebrow mb-2">E-commerce data dissemination</div>
+    <h1 class="display-6 fw-bold mb-2">Understand your customers.</h1>
+    <p class="mb-0 text-white-50">Explore customer demographics, purchasing trends, product categories and payment preferences through interactive data.</p>
+  </section>
+
+  <section class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+    <div><h2 class="h4 section-title mb-1">Customer overview</h2><p class="text-secondary mb-0 small">Use the category filter to explore the dataset.</p></div>
+    <div>
+      <label for="categoryFilter" class="form-label fw-semibold small mb-1">Product category</label>
+      <select id="categoryFilter" class="form-select">
+        <option value="All">All categories</option>
+      <option value="Beauty">Beauty</option><option value="Electronics">Electronics</option><option value="Fashion">Fashion</option><option value="Home &amp; Living">Home &amp; Living</option><option value="Sports">Sports</option></select>
+    </div>
+  </section>
+
+  <section id="kpis" class="row g-3 mb-4" aria-label="Key performance indicators">
+    <div class="col-12 col-md-4"><div class="card kpi p-3 h-100"><div class="d-flex justify-content-between align-items-start"><span class="kpi-label">Total orders</span><span class="kpi-icon">ORD</span></div><div class="kpi-value mt-2">30</div></div></div>
+  
+    <div class="col-12 col-md-4"><div class="card kpi p-3 h-100"><div class="d-flex justify-content-between align-items-start"><span class="kpi-label">Average order value</span><span class="kpi-icon">EGP</span></div><div class="kpi-value mt-2">EGP&nbsp;2,175</div></div></div>
+  
+    <div class="col-12 col-md-4"><div class="card kpi p-3 h-100"><div class="d-flex justify-content-between align-items-start"><span class="kpi-label">Average customer rating</span><span class="kpi-icon">★</span></div><div class="kpi-value mt-2">4.4 / 5</div></div></div>
+  </section>
+
+  <section class="row g-3 mb-4">
+    <div class="col-12 col-lg-6"><article class="card panel p-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2"><h3 class="h6 section-title mb-0">Customer demographics</h3><span class="badge badge-soft">Bar chart</span></div>
+      <div class="chart-wrap"><canvas id="demographicsChart" role="img" aria-label="Grouped bar chart showing customer age groups by gender" width="777" height="412" style="display: block; box-sizing: border-box; height: 275px; width: 518px;"></canvas></div>
+      <p class="small text-secondary mb-0 mt-2">Finding: This chart compares the number of customers in each age group and gender.</p>
+    </article></div>
+    <div class="col-12 col-lg-6"><article class="card panel p-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2"><h3 class="h6 section-title mb-0">Purchases over time</h3><span class="badge badge-soft">Line chart</span></div>
+      <div class="chart-wrap"><canvas id="timeChart" role="img" aria-label="Line chart showing orders by month" width="777" height="412" style="display: block; box-sizing: border-box; height: 275px; width: 518px;"></canvas></div>
+      <p class="small text-secondary mb-0 mt-2">Finding: Monthly order counts show how purchasing activity changes over time.</p>
+    </article></div>
+    <div class="col-12 col-lg-6"><article class="card panel p-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2"><h3 class="h6 section-title mb-0">Popular product categories</h3><span class="badge badge-soft">Bar chart</span></div>
+      <div class="chart-wrap"><canvas id="productsChart" role="img" aria-label="Bar chart showing orders by product category" width="777" height="412" style="display: block; box-sizing: border-box; height: 275px; width: 518px;"></canvas></div>
+      <p class="small text-secondary mb-0 mt-2">Finding: The categories with the highest order counts are the most frequently purchased in this sample.</p>
+    </article></div>
+    <div class="col-12 col-lg-6"><article class="card panel p-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2"><h3 class="h6 section-title mb-0">Payment method distribution</h3><span class="badge badge-soft">Pie chart</span></div>
+      <div class="chart-wrap"><canvas id="paymentChart" role="img" aria-label="Pie chart showing the share of payment methods" width="777" height="412" style="display: block; box-sizing: border-box; height: 275px; width: 518px;"></canvas></div>
+      <p class="small text-secondary mb-0 mt-2">Finding: The chart shows which payment methods customers use most often.</p>
+    </article></div>
+  </section>
+
+  <section class="card panel p-3 p-md-4 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
+      <div><h2 class="h5 section-title mb-1">Customer orders</h2><p class="small text-secondary mb-0">The table updates when you change the product category.</p></div>
+      <span id="recordCount" class="badge badge-soft align-self-start">30 records</span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead><tr><th>Customer ID</th><th>Age group</th><th>Gender</th><th>Category</th><th>Purchase date</th><th>Order value</th><th>Payment</th><th>Rating</th></tr></thead>
+        <tbody id="customerTable">
+    <tr><td class="fw-semibold">C001</td><td>18-24</td><td>Female</td><td>Fashion</td><td>2026-01-05</td><td>EGP&nbsp;850</td><td>Card</td><td>4.5 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C002</td><td>25-34</td><td>Male</td><td>Electronics</td><td>2026-01-12</td><td>EGP&nbsp;4,200</td><td>Cash on Delivery</td><td>4.2 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C003</td><td>18-24</td><td>Female</td><td>Beauty</td><td>2026-01-18</td><td>EGP&nbsp;550</td><td>Wallet</td><td>4.8 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C004</td><td>35-44</td><td>Male</td><td>Home &amp; Living</td><td>2026-01-25</td><td>EGP&nbsp;1,750</td><td>Card</td><td>4.0 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C005</td><td>25-34</td><td>Female</td><td>Fashion</td><td>2026-02-03</td><td>EGP&nbsp;1,200</td><td>Wallet</td><td>4.6 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C006</td><td>18-24</td><td>Male</td><td>Sports</td><td>2026-02-09</td><td>EGP&nbsp;950</td><td>Cash on Delivery</td><td>3.9 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C007</td><td>25-34</td><td>Female</td><td>Electronics</td><td>2026-02-14</td><td>EGP&nbsp;6,100</td><td>Card</td><td>4.7 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C008</td><td>45+</td><td>Female</td><td>Home &amp; Living</td><td>2026-02-21</td><td>EGP&nbsp;2,300</td><td>Cash on Delivery</td><td>4.1 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C009</td><td>35-44</td><td>Male</td><td>Fashion</td><td>2026-03-02</td><td>EGP&nbsp;1,450</td><td>Wallet</td><td>4.3 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C010</td><td>18-24</td><td>Female</td><td>Beauty</td><td>2026-03-08</td><td>EGP&nbsp;700</td><td>Card</td><td>4.9 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C011</td><td>25-34</td><td>Male</td><td>Sports</td><td>2026-03-15</td><td>EGP&nbsp;1,600</td><td>Cash on Delivery</td><td>4.0 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C012</td><td>35-44</td><td>Female</td><td>Electronics</td><td>2026-03-22</td><td>EGP&nbsp;5,200</td><td>Card</td><td>4.4 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C013</td><td>18-24</td><td>Male</td><td>Fashion</td><td>2026-04-04</td><td>EGP&nbsp;990</td><td>Wallet</td><td>4.2 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C014</td><td>25-34</td><td>Female</td><td>Home &amp; Living</td><td>2026-04-11</td><td>EGP&nbsp;2,100</td><td>Card</td><td>4.6 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C015</td><td>45+</td><td>Male</td><td>Electronics</td><td>2026-04-19</td><td>EGP&nbsp;7,500</td><td>Cash on Delivery</td><td>4.1 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C016</td><td>35-44</td><td>Female</td><td>Beauty</td><td>2026-05-01</td><td>EGP&nbsp;820</td><td>Wallet</td><td>4.8 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C017</td><td>18-24</td><td>Female</td><td>Sports</td><td>2026-05-07</td><td>EGP&nbsp;1,100</td><td>Card</td><td>4.5 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C018</td><td>25-34</td><td>Male</td><td>Fashion</td><td>2026-05-14</td><td>EGP&nbsp;1,350</td><td>Cash on Delivery</td><td>3.8 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C019</td><td>35-44</td><td>Male</td><td>Home &amp; Living</td><td>2026-05-23</td><td>EGP&nbsp;2,800</td><td>Card</td><td>4.3 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C020</td><td>25-34</td><td>Female</td><td>Electronics</td><td>2026-06-02</td><td>EGP&nbsp;4,900</td><td>Wallet</td><td>4.7 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C021</td><td>18-24</td><td>Male</td><td>Beauty</td><td>2026-06-09</td><td>EGP&nbsp;620</td><td>Cash on Delivery</td><td>4.0 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C022</td><td>45+</td><td>Female</td><td>Fashion</td><td>2026-06-16</td><td>EGP&nbsp;1,800</td><td>Card</td><td>4.6 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C023</td><td>35-44</td><td>Male</td><td>Sports</td><td>2026-06-24</td><td>EGP&nbsp;1,450</td><td>Wallet</td><td>4.2 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C024</td><td>25-34</td><td>Female</td><td>Home &amp; Living</td><td>2026-07-03</td><td>EGP&nbsp;1,950</td><td>Cash on Delivery</td><td>4.5 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C025</td><td>18-24</td><td>Female</td><td>Electronics</td><td>2026-07-10</td><td>EGP&nbsp;3,800</td><td>Card</td><td>4.8 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C026</td><td>35-44</td><td>Male</td><td>Fashion</td><td>2026-07-18</td><td>EGP&nbsp;1,050</td><td>Wallet</td><td>4.1 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C027</td><td>25-34</td><td>Male</td><td>Beauty</td><td>2026-07-25</td><td>EGP&nbsp;760</td><td>Cash on Delivery</td><td>4.4 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C028</td><td>45+</td><td>Female</td><td>Sports</td><td>2026-08-04</td><td>EGP&nbsp;2,200</td><td>Card</td><td>4.7 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C029</td><td>18-24</td><td>Male</td><td>Home &amp; Living</td><td>2026-08-12</td><td>EGP&nbsp;1,650</td><td>Wallet</td><td>4.0 / 5</td></tr>
+  
+    <tr><td class="fw-semibold">C030</td><td>25-34</td><td>Female</td><td>Fashion</td><td>2026-08-20</td><td>EGP&nbsp;1,550</td><td>Card</td><td>4.9 / 5</td></tr>
+  </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card panel p-3 p-md-4 mb-4">
+    <h2 class="h5 section-title">About this dataset</h2>
+    <p class="mb-2">This project uses a simulated dataset of 30 e-commerce orders created for educational demonstration. It does not contain real customer records.</p>
+    <ul class="small text-secondary mb-0">
+      <li>Currency: Egyptian pounds (EGP).</li>
+      <li>Total orders count each row as one order.</li>
+      <li>Average order value = total order value ÷ number of orders.</li>
+      <li>Average rating = sum of customer ratings ÷ number of ratings.</li>
+      <li>Monthly purchases are counted using the purchase date.</li>
+      <li>Because the data is simulated and limited, findings illustrate the dashboard functions and should not be treated as real market research.</li>
+    </ul>
+  </section>
+</main>
+<footer class="container text-center py-4 small">ShopInsight Analytics · Web Development for Data Dissemination · Project 9</footer>
+
+<script>
+const money = value => new Intl.NumberFormat("en-EG", {style:"currency", currency:"EGP", maximumFractionDigits:0}).format(value);
+const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+let allData = [], charts = {};
+
+function loadData() {
+  // Embedded simulated dataset: this version works as a standalone HTML website.
+  allData = [
+    ["C001","18-24","Female","Fashion","2026-01-05",850,"Card",4.5],
+    ["C002","25-34","Male","Electronics","2026-01-12",4200,"Cash on Delivery",4.2],
+    ["C003","18-24","Female","Beauty","2026-01-18",550,"Wallet",4.8],
+    ["C004","35-44","Male","Home & Living","2026-01-25",1750,"Card",4.0],
+    ["C005","25-34","Female","Fashion","2026-02-03",1200,"Wallet",4.6],
+    ["C006","18-24","Male","Sports","2026-02-09",950,"Cash on Delivery",3.9],
+    ["C007","25-34","Female","Electronics","2026-02-14",6100,"Card",4.7],
+    ["C008","45+","Female","Home & Living","2026-02-21",2300,"Cash on Delivery",4.1],
+    ["C009","35-44","Male","Fashion","2026-03-02",1450,"Wallet",4.3],
+    ["C010","18-24","Female","Beauty","2026-03-08",700,"Card",4.9],
+    ["C011","25-34","Male","Sports","2026-03-15",1600,"Cash on Delivery",4.0],
+    ["C012","35-44","Female","Electronics","2026-03-22",5200,"Card",4.4],
+    ["C013","18-24","Male","Fashion","2026-04-04",990,"Wallet",4.2],
+    ["C014","25-34","Female","Home & Living","2026-04-11",2100,"Card",4.6],
+    ["C015","45+","Male","Electronics","2026-04-19",7500,"Cash on Delivery",4.1],
+    ["C016","35-44","Female","Beauty","2026-05-01",820,"Wallet",4.8],
+    ["C017","18-24","Female","Sports","2026-05-07",1100,"Card",4.5],
+    ["C018","25-34","Male","Fashion","2026-05-14",1350,"Cash on Delivery",3.8],
+    ["C019","35-44","Male","Home & Living","2026-05-23",2800,"Card",4.3],
+    ["C020","25-34","Female","Electronics","2026-06-02",4900,"Wallet",4.7],
+    ["C021","18-24","Male","Beauty","2026-06-09",620,"Cash on Delivery",4.0],
+    ["C022","45+","Female","Fashion","2026-06-16",1800,"Card",4.6],
+    ["C023","35-44","Male","Sports","2026-06-24",1450,"Wallet",4.2],
+    ["C024","25-34","Female","Home & Living","2026-07-03",1950,"Cash on Delivery",4.5],
+    ["C025","18-24","Female","Electronics","2026-07-10",3800,"Card",4.8],
+    ["C026","35-44","Male","Fashion","2026-07-18",1050,"Wallet",4.1],
+    ["C027","25-34","Male","Beauty","2026-07-25",760,"Cash on Delivery",4.4],
+    ["C028","45+","Female","Sports","2026-08-04",2200,"Card",4.7],
+    ["C029","18-24","Male","Home & Living","2026-08-12",1650,"Wallet",4.0],
+    ["C030","25-34","Female","Fashion","2026-08-20",1550,"Card",4.9]
+  ].map(([customer_id, age_group, gender, product_category, purchase_date, order_value_egp, payment_method, customer_rating]) => ({
+    customer_id, age_group, gender, product_category, purchase_date,
+    order_value_egp, payment_method, customer_rating
+  }));
+  const categories = [...new Set(allData.map(d => d.product_category))].sort();
+  categories.forEach(category => document.getElementById("categoryFilter").add(new Option(category, category)));
+  document.getElementById("categoryFilter").addEventListener("change", render);
+  render();
+}
+
+function countBy(data, key) {
+  return data.reduce((result, item) => { result[item[key]] = (result[item[key]] || 0) + 1; return result; }, {});
+}
+function createChart(id, type, data, options={}) {
+  const ctx = document.getElementById(id);
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(ctx, {type, data, options:{responsive:true, maintainAspectRatio:false, ...options}});
+}
+function render() {
+  const selected = document.getElementById("categoryFilter").value;
+  const data = selected === "All" ? allData : allData.filter(d => d.product_category === selected);
+  if (!data.length) return;
+
+  const totalOrders = data.length;
+  const avgOrder = data.reduce((sum,d) => sum + d.order_value_egp, 0) / totalOrders;
+  const avgRating = data.reduce((sum,d) => sum + d.customer_rating, 0) / totalOrders;
+  const kpis = [
+    ["Total orders", totalOrders.toLocaleString(), "ORD"],
+    ["Average order value", money(avgOrder), "EGP"],
+    ["Average customer rating", avgRating.toFixed(1) + " / 5", "★"]
+  ];
+  document.getElementById("kpis").innerHTML = kpis.map(([label,value,icon]) => `
+    <div class="col-12 col-md-4"><div class="card kpi p-3 h-100"><div class="d-flex justify-content-between align-items-start"><span class="kpi-label">${label}</span><span class="kpi-icon">${icon}</span></div><div class="kpi-value mt-2">${value}</div></div></div>
+  `).join("");
+
+  const ages = ["18-24","25-34","35-44","45+"];
+  const genders = ["Female","Male"];
+  createChart("demographicsChart","bar",{
+    labels:ages,
+    datasets:genders.map((gender,i)=>({label:gender,data:ages.map(age=>data.filter(d=>d.age_group===age && d.gender===gender).length),backgroundColor:i===0?"#0e8587":"#8bb8d4",borderRadius:5}))
+  },{scales:{y:{beginAtZero:true,ticks:{precision:0},title:{display:true,text:"Number of orders"}},x:{title:{display:true,text:"Age group"}}}});
+
+  const months = [...new Set(allData.map(d=>d.purchase_date.slice(0,7)))].sort();
+  const monthLabels = months.map(m=>monthNames[Number(m.slice(5,7))-1]);
+  const monthCounts = months.map(m=>data.filter(d=>d.purchase_date.startsWith(m)).length);
+  createChart("timeChart","line",{labels:monthLabels,datasets:[{label:"Orders",data:monthCounts,borderColor:"#0e8587",backgroundColor:"rgba(14,133,135,.14)",fill:true,tension:.3}]},
+    {scales:{y:{beginAtZero:true,ticks:{precision:0},title:{display:true,text:"Number of orders"}},x:{title:{display:true,text:"Month"}}}});
+
+  const categories = [...new Set(allData.map(d=>d.product_category))].sort();
+  createChart("productsChart","bar",{labels:categories,datasets:[{label:"Orders",data:categories.map(c=>data.filter(d=>d.product_category===c).length),backgroundColor:"#3d7897",borderRadius:5}]},
+    {indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0},title:{display:true,text:"Number of orders"}}}});
+
+  const paymentTypes = ["Card","Cash on Delivery","Wallet"];
+  createChart("paymentChart","pie",{labels:paymentTypes,datasets:[{data:paymentTypes.map(p=>data.filter(d=>d.payment_method===p).length),backgroundColor:["#0e8587","#f0a44b","#547da5"],borderWidth:2,borderColor:"#fff"}]},
+    {plugins:{legend:{position:"bottom"}}});
+
+  document.getElementById("customerTable").innerHTML = data.map(d=>`
+    <tr><td class="fw-semibold">${d.customer_id}</td><td>${d.age_group}</td><td>${d.gender}</td><td>${d.product_category}</td><td>${d.purchase_date}</td><td>${money(d.order_value_egp)}</td><td>${d.payment_method}</td><td>${d.customer_rating.toFixed(1)} / 5</td></tr>
+  `).join("");
+  document.getElementById("recordCount").textContent = `${data.length} records`;
+}
+loadData();
+</script>
+
+
+</body></html>
+
